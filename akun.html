@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akun Saya — DriveAuto Parts</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a href="index.html" class="brand">
+      <i class="bi bi-nut"></i>
+      <span>Drive<span class="dot">Auto</span><br><small>SPAREPART STORE</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Beranda</a>
+      <a href="produk.html">Produk</a>
+      <a href="tentang.html">Tentang Kami</a>
+      <a href="kontak.html">Kontak</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="keranjang.html" class="icon-btn" aria-label="Keranjang">
+        <i class="bi bi-cart3"></i>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <span data-auth-slot></span>
+      <button class="nav-toggle" aria-label="Menu"><i class="bi bi-list"></i></button>
+    </div>
+  </div>
+</header>
+
+<section class="page-banner">
+  <div class="wrap">
+    <div class="breadcrumb">Beranda / <span>Akun Saya</span></div>
+    <h1>Akun Saya</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap account-shell">
+    <div class="account-side">
+      <div class="avatar"><i class="bi bi-person-fill"></i></div>
+      <h3 id="ac-name" style="font-size:1.05rem;margin-bottom:4px;"></h3>
+      <p id="ac-email" style="font-size:.82rem;margin-bottom:2px;"></p>
+      <p id="ac-phone" style="font-size:.82rem;margin-bottom:18px;"></p>
+      <button id="logout-btn" class="btn btn-outline btn-block btn-sm"><i class="bi bi-box-arrow-right"></i> Keluar</button>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom:16px;"><i class="bi bi-receipt"></i> Riwayat Pesanan</h3>
+      <div id="orders-list"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span>© <span id="current-year">2026</span> DriveAuto Parts. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/store.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  const user = Store.getSessionUser();
+  if(!user){
+    window.location.href = 'login.html';
+  }else if(user.role === 'admin'){
+    window.location.href = 'admin.html';
+  }else{
+    document.getElementById('ac-name').textContent = user.name;
+    document.getElementById('ac-email').textContent = user.email;
+    document.getElementById('ac-phone').textContent = user.phone;
+
+    const orders = Store.getOrdersByUser(user.id);
+    const list = document.getElementById('orders-list');
+    if(orders.length === 0){
+      list.innerHTML = `
+        <div class="empty-cart" style="padding:40px 20px;">
+          <i class="bi bi-inbox"></i>
+          <p>Belum ada pesanan. Yuk mulai belanja sparepart.</p>
+          <a href="produk.html" class="btn btn-primary" style="margin-top:12px;"><i class="bi bi-grid"></i> Lihat Produk</a>
+        </div>`;
+    }else{
+      orders.forEach(o => {
+        const date = new Date(o.date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+        const statusClass = o.status === 'Selesai' ? 'status-selesai' : 'status-diproses';
+        const itemsHtml = o.items.map(i => `<div class="order-line"><span>${i.name} × ${i.qty}</span><span>${formatRupiah(i.price * i.qty)}</span></div>`).join('');
+        list.insertAdjacentHTML('beforeend', `
+          <div class="order-card">
+            <div class="order-card-head">
+              <span class="order-id">#${o.id} — ${date}</span>
+              <span class="status-pill ${statusClass}">${o.status}</span>
+            </div>
+            ${itemsHtml}
+            <div class="order-line" style="border-bottom:none;font-weight:700;"><span>Total</span><span>${formatRupiah(o.total)}</span></div>
+            <p style="font-size:.8rem;margin-top:6px;"><i class="bi bi-credit-card"></i> ${o.payment}</p>
+          </div>`);
+      });
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      Store.logout();
+      window.location.href = 'index.html';
+    });
+  }
+</script>
+</body>
+</html>

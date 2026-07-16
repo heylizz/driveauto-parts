@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kontak — DriveAuto Parts</title>
+<meta name="description" content="Hubungi DriveAuto Parts untuk pertanyaan seputar sparepart kendaraan, pemesanan, dan kerja sama.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a href="index.html" class="brand">
+      <i class="bi bi-nut"></i>
+      <span>Drive<span class="dot">Auto</span><br><small>SPAREPART STORE</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Beranda</a>
+      <a href="produk.html">Produk</a>
+      <a href="tentang.html">Tentang Kami</a>
+      <a href="kontak.html" class="active">Kontak</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="keranjang.html" class="icon-btn" aria-label="Keranjang">
+        <i class="bi bi-cart3"></i>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <span data-auth-slot></span>
+      <button class="nav-toggle" aria-label="Menu"><i class="bi bi-list"></i></button>
+    </div>
+  </div>
+</header>
+
+<section class="page-banner">
+  <div class="wrap">
+    <div class="breadcrumb">Beranda / <span>Kontak</span></div>
+    <h1>Hubungi Kami</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap grid-2" style="align-items:flex-start;">
+    <div class="form-card">
+      <h2 style="font-size:1.3rem;margin-bottom:6px;">Kirim Pesan</h2>
+      <p style="font-size:.9rem;margin-bottom:24px;">Isi formulir di bawah, tim kami akan merespons dalam 1x24 jam kerja.</p>
+
+      <form id="contact-form" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="f-name">Nama Lengkap</label>
+            <input type="text" id="f-name" name="name" placeholder="Nama Anda">
+            <span class="error" id="err-name"></span>
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input type="email" id="f-email" name="email" placeholder="nama@email.com">
+            <span class="error" id="err-email"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="f-phone">Nomor Telepon</label>
+            <input type="tel" id="f-phone" name="phone" placeholder="08xxxxxxxxxx">
+            <span class="error" id="err-phone"></span>
+          </div>
+          <div class="field">
+            <label for="f-topic">Topik</label>
+            <select id="f-topic" name="topic">
+              <option>Pertanyaan Produk</option>
+              <option>Pemesanan</option>
+              <option>Klaim Garansi</option>
+              <option>Kerja Sama Mitra Bengkel</option>
+              <option>Lainnya</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field full">
+            <label for="f-message">Pesan</label>
+            <textarea id="f-message" name="message" placeholder="Tulis pesan Anda di sini..."></textarea>
+            <span class="error" id="err-message"></span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Kirim Pesan</button>
+        <p class="form-note"><i class="bi bi-lock"></i> Data Anda hanya digunakan untuk keperluan komunikasi layanan pelanggan.</p>
+      </form>
+    </div>
+
+    <div>
+      <ul class="info-list">
+        <li>
+          <span class="ic"><i class="bi bi-geo-alt"></i></span>
+          <div><b>Alamat Toko</b><span>Jl. F.M. Noto No.20, Kotabaru, Kec. Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55224</span></div>
+        </li>
+        <li>
+          <span class="ic"><i class="bi bi-telephone"></i></span>
+          <div><b>Telepon</b><span>+62 812-3456-7890</span></div>
+        </li>
+        <li>
+          <span class="ic"><i class="bi bi-envelope"></i></span>
+          <div><b>Email</b><span>holischernobyl@gmail.com</span></div>
+        </li>
+        <li>
+          <span class="ic"><i class="bi bi-clock"></i></span>
+          <div><b>Jam Operasional</b><span>Senin – Sabtu, 08.00 – 17.00 WIB</span></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:14px;"><i class="bi bi-nut"></i> DRIVE<span class="dot">AUTO</span></div>
+        <p style="font-size:.88rem;max-width:280px;">Toko sparepart kendaraan yang menyediakan komponen
+          berkualitas dengan harga jujur dan proses belanja yang praktis.</p>
+<div class="social-row" style="margin-top:18px;">
+  <a href="https://instagram.com/nurkholisanwari" target="_blank" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+  <a href="https://wa.me/6287898781062" target="_blank" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+  <a href="https://www.youtube.com/watch?v=EHgA1c9JLPM" target="_blank" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+</div>
+      </div>
+      <div>
+        <h5>Navigasi</h5>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Kategori</h5>
+        <ul>
+          <li><a href="produk.html">Oli &amp; Cairan</a></li>
+          <li><a href="produk.html">Rem &amp; Suspensi</a></li>
+          <li><a href="produk.html">Kelistrikan</a></li>
+          <li><a href="produk.html">Mesin &amp; Filter</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Kontak</h5>
+        <ul>
+          <li><i class="bi bi-geo-alt"></i> Yogyakarta</li>
+          <li><i class="bi bi-telephone"></i> +62 812-3456-7890</li>
+          <li><i class="bi bi-envelope"></i> holischernobyl@gmail.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="current-year">2026</span> DriveAuto Parts. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/store.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

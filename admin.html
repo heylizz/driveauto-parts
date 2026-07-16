@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin — DriveAuto Parts</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="admin-shell" id="admin-shell" style="display:none;">
+  <aside class="admin-side">
+    <div class="brand"><i class="bi bi-nut"></i> Drive<span class="dot">Auto</span></div>
+    <nav class="admin-nav">
+      <a href="#" class="active" data-tab="produk"><i class="bi bi-box-seam"></i> Data Produk</a>
+      <a href="#" data-tab="pesanan"><i class="bi bi-receipt"></i> Pesanan Masuk</a>
+      <a href="index.html" target="_blank"><i class="bi bi-globe"></i> Lihat Website</a>
+      <a href="#" id="admin-logout"><i class="bi bi-box-arrow-right"></i> Keluar</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-head">
+      <div>
+        <span class="kicker"><i class="bi bi-speedometer2"></i> Panel Pemilik</span>
+        <h1 id="admin-page-title">Kelola Data Sparepart</h1>
+      </div>
+      <button class="btn btn-primary" id="btn-add-product"><i class="bi bi-plus-lg"></i> Tambah Produk</button>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card"><i class="bi bi-box-seam"></i><b id="stat-total">0</b><span>Total produk</span></div>
+      <div class="stat-card"><i class="bi bi-exclamation-triangle"></i><b id="stat-low">0</b><span>Stok menipis (≤ 5)</span></div>
+      <div class="stat-card"><i class="bi bi-receipt"></i><b id="stat-orders">0</b><span>Pesanan masuk</span></div>
+    </div>
+
+    <!-- Tab: Data Produk -->
+    <div class="admin-table-wrap" id="view-produk">
+      <div class="admin-table-head">
+        <b style="font-size:.92rem;">Daftar Produk</b>
+        <input type="text" id="admin-search" placeholder="Cari produk..." style="padding:8px 12px;border:1px solid var(--line-strong);border-radius:var(--radius-sm);font-size:.85rem;">
+      </div>
+      <table class="parts-table">
+        <thead>
+          <tr><th>Kode</th><th>Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th></th></tr>
+        </thead>
+        <tbody id="admin-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Tab: Pesanan Masuk -->
+    <div class="admin-table-wrap" id="view-pesanan" style="display:none;">
+      <div class="admin-table-head">
+        <b style="font-size:.92rem;">Pesanan Masuk</b>
+      </div>
+      <table class="parts-table">
+        <thead>
+          <tr><th>ID Pesanan</th><th>Pembeli</th><th>Tanggal</th><th>Total</th><th>Status</th><th></th></tr>
+        </thead>
+        <tbody id="orders-body"></tbody>
+      </table>
+      <p id="orders-empty" style="display:none;text-align:center;padding:40px;color:var(--ink-dim);">Belum ada pesanan masuk.</p>
+    </div>
+  </main>
+</div>
+
+<!-- Modal tambah / edit produk -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modal-title" style="font-size:1.1rem;">Tambah Produk</h3>
+      <button id="modal-close"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form id="product-form">
+      <input type="hidden" id="pf-id">
+      <div class="field" style="margin-bottom:14px;">
+        <label>Nama Produk</label>
+        <input type="text" id="pf-name" required>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Kode Part</label><input type="text" id="pf-code" required></div>
+        <div class="field">
+          <label>Kategori</label>
+          <select id="pf-category">
+            <option value="oli">Oli & Cairan</option>
+            <option value="rem">Rem & Suspensi</option>
+            <option value="listrik">Kelistrikan</option>
+            <option value="mesin">Mesin & Filter</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Kompatibilitas</label>
+          <select id="pf-compat" required>
+            <option value="">Pilih Kompatibilitas</option>
+            <option value="Mobil">Mobil</option>
+            <option value="Motor">Motor</option>
+            <option value="Truk">Truk</option>
+            <option value="Universal">Universal (Mobil & Motor)</option>
+          </select>
+        </div>
+        <div class="field"><label>Harga (Rp)</label><input type="number" id="pf-price" min="0" required></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Stok</label><input type="number" id="pf-stock" min="0" required></div>
+        <div class="field">
+          <label>Gambar Produk</label>
+          <input type="file" id="pf-img" accept="image/*">
+          <img id="pf-img-preview" src="" alt="" style="display:none;margin-top:8px;width:60px;height:60px;object-fit:cover;border-radius:8px;">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-check2"></i> Simpan Produk</button>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/store.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  const user = Store.getSessionUser();
+  if(!user || user.role !== 'admin'){
+    window.location.href = 'login.html';
+  }else{
+    document.getElementById('admin-shell').style.display = 'grid';
+
+    const modal = document.getElementById('product-modal');
+    const form = document.getElementById('product-form');
+    const viewProduk = document.getElementById('view-produk');
+    const viewPesanan = document.getElementById('view-pesanan');
+    const btnAddProduct = document.getElementById('btn-add-product');
+    const pageTitle = document.getElementById('admin-page-title');
+
+    function renderStats(){
+      const products = Store.getProducts();
+      document.getElementById('stat-total').textContent = products.length;
+      document.getElementById('stat-low').textContent = products.filter(p => p.stock <= 5).length;
+      document.getElementById('stat-orders').textContent = Store.getOrders().length;
+    }
+
+    function renderTable(query = ''){
+      const body = document.getElementById('admin-body');
+      body.innerHTML = '';
+      const q = query.toLowerCase();
+      Store.getProducts()
+        .filter(p => p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q))
+        .forEach(p => {
+          const low = p.stock <= 5;
+          body.insertAdjacentHTML('beforeend', `
+            <tr>
+              <td style="font-family:var(--font-mono);font-size:.8rem;">${p.code}</td>
+              <td class="prod-name"><img class="prod-thumb" src="${p.img}" alt="${p.name}">${p.name}</td>
+              <td>${CATEGORY_LABELS[p.category] || p.category}</td>
+              <td class="price">${formatRupiah(p.price)}</td>
+              <td><span class="${low ? 'stock-low' : 'stock-ok'}"><i class="bi bi-circle-fill"></i> ${p.stock}</span></td>
+              <td>
+                <div class="action-icons">
+                  <button data-edit="${p.id}" aria-label="Ubah"><i class="bi bi-pencil"></i></button>
+                  <button class="del" data-del="${p.id}" aria-label="Hapus"><i class="bi bi-trash3"></i></button>
+                </div>
+              </td>
+            </tr>`);
+        });
+
+      body.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openModal(b.getAttribute('data-edit'))));
+      body.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
+        if(confirm('Hapus produk ini dari katalog?')){
+          Store.deleteProduct(b.getAttribute('data-del'));
+          renderTable(document.getElementById('admin-search').value);
+          renderStats();
+          showToast('Produk dihapus', 'bi-trash3');
+        }
+      }));
+    }
+
+    function renderOrders(){
+      const body = document.getElementById('orders-body');
+      const empty = document.getElementById('orders-empty');
+      body.innerHTML = '';
+      const orders = Store.getOrders();
+      const users = Store.getUsers();
+
+      empty.style.display = orders.length === 0 ? 'block' : 'none';
+
+      orders.forEach(o => {
+        const buyer = users.find(u => u.id === o.userId);
+        const date = new Date(o.date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+        const statusClass = o.status === 'Selesai' ? 'status-selesai' : 'status-diproses';
+        const nextStatus = o.status === 'Selesai' ? 'Diproses' : 'Selesai';
+        body.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td style="font-family:var(--font-mono);font-size:.8rem;">#${o.id}</td>
+            <td>${buyer ? buyer.name : 'Pengguna tidak ditemukan'}</td>
+            <td>${date}</td>
+            <td class="price">${formatRupiah(o.total)}</td>
+            <td><span class="status-pill ${statusClass}">${o.status}</span></td>
+            <td><button class="btn btn-outline btn-sm" data-toggle-order="${o.id}">Tandai ${nextStatus}</button></td>
+          </tr>`);
+      });
+
+      body.querySelectorAll('[data-toggle-order]').forEach(b => b.addEventListener('click', () => {
+        const id = b.getAttribute('data-toggle-order');
+        const o = Store.getOrders().find(o => o.id === id);
+        if(!o) return;
+        const newStatus = o.status === 'Selesai' ? 'Diproses' : 'Selesai';
+        Store.updateOrderStatus(id, newStatus);
+        renderOrders();
+        showToast('Status pesanan diperbarui', 'bi-check2-circle');
+      }));
+    }
+
+    // switch tab Data Produk <-> Pesanan Masuk
+    document.querySelectorAll('.admin-nav [data-tab]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.admin-nav [data-tab]').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        const tab = link.getAttribute('data-tab');
+        if(tab === 'produk'){
+          viewProduk.style.display = 'block';
+          viewPesanan.style.display = 'none';
+          btnAddProduct.style.display = 'inline-flex';
+          pageTitle.textContent = 'Kelola Data Sparepart';
+        }else{
+          viewProduk.style.display = 'none';
+          viewPesanan.style.display = 'block';
+          btnAddProduct.style.display = 'none';
+          pageTitle.textContent = 'Kelola Pesanan Masuk';
+          renderOrders();
+        }
+      });
+    });
+
+    document.getElementById('pf-img').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        document.getElementById('pf-img-preview').src = reader.result;
+        document.getElementById('pf-img-preview').style.display = 'block';
+        document.getElementById('pf-img').dataset.base64 = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function openModal(id){
+      form.reset();
+      document.getElementById('pf-id').value = '';
+      document.getElementById('pf-img').dataset.base64 = '';
+      document.getElementById('pf-img-preview').style.display = 'none';
+      document.getElementById('pf-img-preview').src = '';
+      document.getElementById('modal-title').textContent = id ? 'Ubah Produk' : 'Tambah Produk';
+      if(id){
+        const p = Store.getProduct(id);
+        document.getElementById('pf-id').value = p.id;
+        document.getElementById('pf-name').value = p.name;
+        document.getElementById('pf-code').value = p.code;
+        document.getElementById('pf-category').value = p.category;
+        document.getElementById('pf-compat').value = p.compat;
+        document.getElementById('pf-price').value = p.price;
+        document.getElementById('pf-stock').value = p.stock;
+        document.getElementById('pf-img-preview').src = p.img;
+        document.getElementById('pf-img-preview').style.display = 'block';
+        document.getElementById('pf-img').dataset.base64 = p.img;
+      }
+      modal.classList.add('open');
+    }
+    function closeModal(){ modal.classList.remove('open'); }
+
+    btnAddProduct.addEventListener('click', () => openModal(null));
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = document.getElementById('pf-id').value || ('p-' + Date.now());
+      const product = {
+        id,
+        name: document.getElementById('pf-name').value.trim(),
+        code: document.getElementById('pf-code').value.trim(),
+        category: document.getElementById('pf-category').value,
+        compat: document.getElementById('pf-compat').value,
+        price: Number(document.getElementById('pf-price').value),
+        stock: Number(document.getElementById('pf-stock').value),
+        img: document.getElementById('pf-img').dataset.base64 || 'https://placehold.co/300x300/f5f6f3/1c2321?text=Sparepart'
+      };
+      Store.upsertProduct(product);
+      closeModal();
+      renderTable(document.getElementById('admin-search').value);
+      renderStats();
+      showToast('Produk tersimpan', 'bi-check2-circle');
+    });
+
+    document.getElementById('admin-search').addEventListener('input', (e) => renderTable(e.target.value));
+
+    document.getElementById('admin-logout').addEventListener('click', (e) => {
+      e.preventDefault();
+      Store.logout();
+      window.location.href = 'index.html';
+    });
+
+    renderTable();
+    renderStats();
+  }
+</script>
+</body>
+</html>
