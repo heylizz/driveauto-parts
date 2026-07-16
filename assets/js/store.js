@@ -113,9 +113,6 @@ const Store = {
   }
 };
 
-/* Catatan gambar: path mengacu ke folder assets/img/ sesuai nama file yang
-   sudah kamu siapkan (b.nap14.png, kampascanter.png, dst). Cek lagi nama +
-   ekstensi persis di foldermu, kalau beda tinggal sesuaikan value img di bawah. */
 const DEFAULT_PRODUCTS = [
   { id:'p01', code:'OLI-MDT-40-1L', name:'Oli Mesin Meditran S SAE 40 1 Liter', category:'oli', compat:'Motor', price:75000, stock:24, img:'assets/img/olimeds.png' },
   { id:'p02', code:'OLI-DLB-5L', name:'Oli Mesin Deltalube 5 Liter', category:'oli', compat:'Mobil', price:145000, stock:15, img:'assets/img/olideltalube.png' },
@@ -137,7 +134,7 @@ const DEFAULT_PRODUCTS = [
   { id:'p18', code:'MSN-FS-CTRPS', name:'Filter Solar Canter PS', category:'mesin', compat:'Mobil', price:85000, stock:8, img:'assets/img/filtersolarctrps.jpg' },
   { id:'p19', code:'MSN-BUSI-NGK', name:'Busi Motor NGK Iridium SparkFire', category:'mesin', compat:'Motor', price:15000, stock:40, img:'assets/img/busimotorngk.jpg' },
 
-  // --- Produk tambahan (harga & stok masih placeholder, tolong koreksi via panel admin) ---
+
   { id:'p20', code:'REM-CP-ELF', name:'Kampas Rem Elf', category:'rem', compat:'Truk', price:180000, stock:6, img:'assets/img/cupremelf.png' },
   { id:'p21', code:'REM-CP-HT', name:'Kampas Rem HT', category:'rem', compat:'Truk', price:190000, stock:6, img:'assets/img/cupremht.png' },
   { id:'p22', code:'MSN-MUR-RD', name:'Mur Roda', category:'mesin', compat:'Mobil', price:8000, stock:40, img:'assets/img/b.rdnut.jpg' },
