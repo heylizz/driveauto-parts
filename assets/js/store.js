@@ -1,10 +1,3 @@
-/* ==========================================================================
-   DriveAuto Parts — store.js
-   Simulasi database memakai localStorage (prototipe frontend, belum ada
-   server/database sungguhan). Menyimpan produk, akun, sesi login,
-   keranjang, dan riwayat pesanan.
-   ========================================================================== */
-
 const DB_KEYS = {
   products: 'da_products',
   users: 'da_users',
