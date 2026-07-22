@@ -66,6 +66,7 @@
   </div>
 </section>
 
+<section class="section">
   <div class="wrap">
     <div class="section-head">
       <div>
@@ -97,7 +98,22 @@
       </a>
     </div>
   </div>
-  <br>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="kicker"><i class="bi bi-bag-check"></i> Produk Pilihan</span>
+        <h2>Sering <span>Dicari Pelanggan</span></h2>
+      </div>
+      <a href="produk.html" class="btn btn-outline">Lihat Semua Produk</a>
+    </div>
+    <div class="product-grid" id="home-products"></div>
+  </div>
+</section>
+
+<br>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -177,6 +193,35 @@
 
     renderTag();
     setInterval(nextRandom, 4000);
+  })();
+
+  // Produk Pilihan: kartu produk asli dari Store, bukan data statis
+  (function(){
+    const wrap = document.getElementById('home-products');
+    if(!wrap) return;
+
+    const featured = Store.getProducts().filter(p => p.featured).slice(0, 4);
+    const list = featured.length ? featured : Store.getProducts().slice(0, 4);
+
+    list.forEach(p => {
+      const low = p.stock <= 5;
+      wrap.insertAdjacentHTML('beforeend', `
+        <div class="product-card">
+          <div class="pc-img"><img src="${p.img}" alt="${p.name}"></div>
+          <div class="pc-body">
+            <span class="pc-cat">${CATEGORY_LABELS[p.category] || p.category}</span>
+            <span class="pc-name">${p.name}</span>
+            <span class="pc-compat"><i class="bi bi-check2-circle"></i> ${p.compat}</span>
+            <span class="${low ? 'stock-low' : 'stock-ok'}"><i class="bi bi-circle-fill"></i> ${low ? 'Terbatas' : 'Tersedia'}</span>
+            <div class="pc-foot">
+              <span class="price">${formatRupiah(p.price)}</span>
+              <button class="add-cart-btn" data-add-to-cart="${p.id}" aria-label="Tambah ke keranjang"><i class="bi bi-cart-plus"></i></button>
+            </div>
+          </div>
+        </div>`);
+    });
+    // Tombol keranjang di atas otomatis kebaca listener global main.js
+    // (script ini jalan sebelum DOMContentLoaded selesai).
   })();
 </script>
 </body>
